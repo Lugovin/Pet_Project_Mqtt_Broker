@@ -1,0 +1,34 @@
+# application.yml
+server:
+  port: 8081  # или 8082, 8088, 8090, 9000, 9090
+
+
+
+
+
+mqtt:
+  broker:
+    url: tcp://localhost:1883
+    username: admin
+    password: password
+  client:
+    id: spring-mqtt-client
+    clean-session: true
+    connection-timeout: 10
+    keepalive-interval: 60
+    qos: 1
+  topics:
+    inbound:
+      - test/topic
+      - test/topic2
+    outbound: test/response
+
+
+
+# Logging
+logging:
+  level:
+    com:
+      example: DEBUG
+    io:
+      moquette: INFO
