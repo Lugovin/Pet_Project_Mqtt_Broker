@@ -1,4 +1,4 @@
-package com.example.pet_project_mqtt_broker;
+package com.example.pet_project_mqtt_broker.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -10,8 +10,7 @@ import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
 import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannelAdapter;
 import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
 import org.springframework.messaging.MessageChannel;
-import org.springframework.integration.annotation.ServiceActivator;
-import org.springframework.messaging.MessageHandler;
+
 @Configuration
 @EnableIntegration
 public class MqttInboundConfig {

@@ -1,4 +1,4 @@
-package com.example.pet_project_mqtt_broker;
+package com.example.pet_project_mqtt_broker.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.example.pet_project_mqtt_broker;
+package com.example.pet_project_mqtt_broker.config;
 
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.springframework.beans.factory.annotation.Value;

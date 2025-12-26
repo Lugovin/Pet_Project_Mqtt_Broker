@@ -1,4 +1,4 @@
-package com.example.pet_project_mqtt_broker;
+package com.example.pet_project_mqtt_broker.config;
 
 import io.moquette.broker.Server;
 import io.moquette.broker.config.IConfig;
