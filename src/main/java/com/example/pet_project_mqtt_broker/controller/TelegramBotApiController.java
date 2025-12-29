@@ -3,11 +3,14 @@ package com.example.pet_project_mqtt_broker.controller;
 
 import com.example.pet_project_mqtt_broker.model.SensorData;
 import com.example.pet_project_mqtt_broker.service.SensorDataService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/bot")
@@ -19,41 +22,31 @@ public class TelegramBotApiController {
         this.sensorDataService = sensorDataService;
     }
 
-
-    // Получение последней температуры
-    @GetMapping("/temperature")
-    public ResponseEntity<String> getTemperature() {
+    @GetMapping("/sensor/{sensorId}")
+    public ResponseEntity<SensorData> getSensorData(
+            @PathVariable String sensorId
+    ) {
         try {
-            // Получаем последние данные с датчика
-            SensorData lastData = sensorDataService.getLastSensorRoom1Data();
-
-            // Если данных нет
-            if (lastData == null || lastData.temperature() == null) {
-                String noDataMessage = "❌ Нет данных о температуре\n" +
-                        "Датчик еще не отправлял данные или произошла ошибка.";
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(noDataMessage);
+            SensorData data = sensorDataService.getLastBySensorId(sensorId);
+            if (data == null) {
+                return ResponseEntity.notFound().build();
             }
-            return ResponseEntity.ok(lastData.temperature().toString());
+            return ResponseEntity.ok(data);
 
         } catch (Exception e) {
-            // В случае ошибки
-            String errorMessage = "⚠️ Ошибка при получении температуры:\n" +
-                    e.getMessage();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(errorMessage);
+            return ResponseEntity.internalServerError().build();
         }
     }
 
-    @GetMapping("/sensors")
-    public ResponseEntity<SensorData> getSensors() {
-        try {
-            SensorData lastData = sensorDataService.getLastSensorRoom1Data();
 
-            if (lastData == null) {
+    @GetMapping("/sensors")
+    public ResponseEntity<List<SensorData>> getAllSensors() {
+        try {
+            List<SensorData> sensors = new ArrayList<>(sensorDataService.getLastSensorsData().values());
+            if (sensors == null) {
                 return ResponseEntity.notFound().build();
             }
-            return ResponseEntity.ok(lastData);
+            return ResponseEntity.ok(sensors);
 
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();

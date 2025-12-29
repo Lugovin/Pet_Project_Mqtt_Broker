@@ -28,15 +28,13 @@ public class SensorMessageHandler {
             } else {
                 payloadStr = payload.toString();
             }
-
+            sensorDataService.parseAndConvert(topic, payloadStr); // Подсохраняем данные с датчика
             System.out.println("=".repeat(60));
             System.out.println("📡 MQTT MESSAGE RECEIVED");
             System.out.println("Topic: " + topic);
             System.out.println("Payload: " + payloadStr);
             System.out.println("=".repeat(60));
 
-
-            System.out.println(sensorDataService.parseAndConvert(topic, payloadStr).toString());
 
         } catch (Exception e) {
             System.err.println("❌ Error processing MQTT message: " + e.getMessage());

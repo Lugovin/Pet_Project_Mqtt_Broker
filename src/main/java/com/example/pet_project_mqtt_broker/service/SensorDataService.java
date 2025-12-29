@@ -6,15 +6,15 @@ import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class SensorDataService {
 
+    private Map<String, SensorData> lastSensorsData = new HashMap<>();
 
-
-    public SensorData lastSensorRoom1Data;
-
-    public SensorData parseAndConvert(String topic, String payload) {
+    public void parseAndConvert(String topic, String payload) {
         try {
             ObjectMapper mapper = new ObjectMapper();
             JsonNode root = mapper.readTree(payload);
@@ -29,9 +29,8 @@ public class SensorDataService {
                     sensorId, temperature, humidity, pressure, messId, timestamp
             );
             // Сохраняем как последние данные
-            this.lastSensorRoom1Data = sensorData;
+            lastSensorsData.put(sensorId, sensorData);
 
-            return sensorData;
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse sensor data", e);
         }
@@ -41,7 +40,11 @@ public class SensorDataService {
         return topic.split("/")[1];
     }
 
-    public SensorData getLastSensorRoom1Data() {
-        return lastSensorRoom1Data;
+    public Map<String, SensorData> getLastSensorsData() {
+        return lastSensorsData;
+    }
+
+    public SensorData getLastBySensorId(String sensorId){
+        return lastSensorsData.get(sensorId);
     }
 }
