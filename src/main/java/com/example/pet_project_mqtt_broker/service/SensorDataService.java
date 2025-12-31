@@ -25,9 +25,17 @@ public class SensorDataService {
             Double pressure = root.get("pressure").asDouble();
             long messId = root.get("messId").asLong();
             LocalDateTime timestamp = LocalDateTime.now();
+
+            // Обработка temperatureOutside - может отсутствовать
+            Double temperatureOutside = null;
+            if (root.has("temperatureOutside")) {
+                temperatureOutside = root.get("temperatureOutside").asDouble();
+            }
+
             SensorData sensorData = new SensorData(
-                    sensorId, temperature, humidity, pressure, messId, timestamp
+                    sensorId, temperature, temperatureOutside, humidity, pressure, messId, timestamp
             );
+
             // Сохраняем как последние данные
             lastSensorsData.put(sensorId, sensorData);
 
@@ -35,6 +43,9 @@ public class SensorDataService {
             throw new RuntimeException("Failed to parse sensor data", e);
         }
     }
+
+
+
 
     private String extractSensorIdFromTopic(String topic) {
         return topic.split("/")[1];
